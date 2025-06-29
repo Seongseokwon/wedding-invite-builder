@@ -1,6 +1,7 @@
 "use client";
 import { useDrop } from "react-dnd";
 import React from "react";
+import CanvasComponent, { CanvasItem } from "./CanvasComponent";
 
 const COMPONENT_TYPE = "COMPONENT";
 
@@ -43,7 +44,7 @@ export default function MobileCanvas({
   onSelect,
   selectedIndex,
 }: {
-  canvasItems: { type: string; label: string }[];
+  canvasItems: CanvasItem[];
   onDrop: (item: { type: string; label: string }, dropIndex: number) => void;
   onSelect: (idx: number) => void;
   selectedIndex: number | null;
@@ -97,18 +98,12 @@ export default function MobileCanvas({
             {/* 맨 위 드랍존 */}
             <DropZone dropIndex={0} onDrop={onDrop} />
             {canvasItems.map((item, idx) => (
-              <React.Fragment key={idx}>
-                <button
-                  type="button"
+              <React.Fragment key={item.id}>
+                <CanvasComponent
+                  item={item}
+                  isSelected={selectedIndex === idx}
                   onClick={() => onSelect(idx)}
-                  className={`w-full bg-white border rounded p-2 text-center text-gray-800 shadow-sm text-sm transition-all duration-150 outline-none ${
-                    selectedIndex === idx
-                      ? "border-purple-500 ring-2 ring-purple-200"
-                      : "border-gray-200"
-                  }`}
-                >
-                  {item.label}
-                </button>
+                />
                 {/* 각 요소 아래 드랍존 (마지막 요소는 dropCanvas로 대체) */}
                 <DropZone dropIndex={idx + 1} onDrop={onDrop} />
               </React.Fragment>
